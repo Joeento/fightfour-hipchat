@@ -142,17 +142,17 @@ module.exports = function (app, addon) {
     }
     );
 
-  // This is an example route to handle an incoming webhook
-  // https://developer.atlassian.com/hipchat/guide/webhooks
-  app.post('/webhook',
-    addon.authenticate(),
-    function (req, res) {
-      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'pong')
-        .then(function (data) {
-          res.sendStatus(200);
-        });
+  app.post('/webhook', addon.authenticate(), function (req, res) {
+    var item = req.body.item;
+    var command = item.message.message.split(' ');
+    switch (command[1]) {
+    default:
+      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again.').then(function (data) {
+        res.json({status: 'ok'});
+      });
+      break;
     }
-    );
+  });
 
   // Notify the room that the add-on was installed. To learn more about
   // Connect's install flow, check out:
