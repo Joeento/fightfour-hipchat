@@ -7,6 +7,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var errorHandler = require('errorhandler');
+var mongoose = require('mongoose');
 var morgan = require('morgan');
 // You need to load `atlassian-connect-express` to use her godly powers
 var ac = require('atlassian-connect-express');
@@ -20,6 +21,11 @@ var hbs = require('express-hbs');
 var http = require('http');
 var path = require('path');
 var os = require('os');
+
+//add my game models
+var User = require('./models/user');
+var Game = require('./models/game');
+
 
 // Uncomment this if you're using redis as your store.
 // ac.store.register('redis', require('atlassian-connect-express-redis'));
@@ -36,6 +42,7 @@ var app = express();
 var addon = ac(app);
 // You can set this in `config.js`
 var port = addon.config.port();
+console.log(addon.config);
 // Declares the environment to use in `config.js`
 var devEnv = app.get('env') == 'development';
 
@@ -44,6 +51,7 @@ var hipchat = require('atlassian-connect-express-hipchat')(addon, app);
 
 // The following settings applies to all environments
 app.set('port', port);
+console.log(port);
 
 // Configure the Handlebars view engine
 app.engine('hbs', hbs.express3({partialsDir: viewsDir}));
@@ -66,6 +74,7 @@ app.use(expiry(app, {dir: staticDir, debug: devEnv}));
 hbs.registerHelper('furl', function(url){ return app.locals.furl(url); });
 // Mount the static resource dir
 app.use(express.static(staticDir));
+mongoose.connect(process.env.MONGO_URL);
 
 // Show nicer errors when in dev mode
 if (devEnv) app.use(errorHandler());
