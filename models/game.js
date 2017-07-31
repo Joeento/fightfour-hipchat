@@ -97,7 +97,7 @@ gameSchema.methods.nextTurn = function() {
 
 gameSchema.methods.generateImage = function(callback) {
 	var game = this;
-	PImage.decodePNGFromStream(fs.createReadStream('assets/empty_grid.png')).then(function(input) {
+	PImage.decodePNGFromStream(fs.createReadStream('public/img/empty_grid.png')).then(function(input) {
 		var output = PImage.make(750, 608);
 		var ctx = output.getContext('2d');
 		ctx.drawImage(input,
@@ -126,7 +126,7 @@ gameSchema.methods.generateImage = function(callback) {
 			}
 		}
 
-		var dir = 'images/';
+		var dir = 'public/grids/';
 		if (!fs.existsSync(dir)) {
 			fs.mkdirSync(dir);
 		}
@@ -136,9 +136,9 @@ gameSchema.methods.generateImage = function(callback) {
 			fs.mkdirSync(dir);
 		}
 		
-		var image_name = dir + '/' + Date.now() + '.png';
-		PImage.encodePNGToStream(output,fs.createWriteStream(image_name)).then(function() {
-			callback(image_name);
+		var file_name = Date.now() + '.png';
+		PImage.encodePNGToStream(output,fs.createWriteStream(dir + '/' + file_name)).then(function() {
+			callback('grids/' + game.room_id + '/' + file_name);
 		});
 	});
 };
