@@ -85,7 +85,7 @@
         // that to be honored here.
         "port": "$PORT",
         // This is the public URL to your production add-on.
-        "localBaseUrl": "https://your-subdomain.herokuapp.com",
+        "localBaseUrl": "https://fightfour-hipchat.heroku.com/",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
