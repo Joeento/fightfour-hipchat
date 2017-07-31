@@ -53,7 +53,13 @@ module.exports = function (app, addon) {
       //   the roomId
       res.render('config', req.context);
     }
-    );
+  );
+
+  app.get('/privacy',
+    function (req, res) {
+      res.render('privacy', req.context);
+    }
+  );
 
   // This is an example glance that shows in the sidebar
   // https://developer.atlassian.com/hipchat/guide/glances
