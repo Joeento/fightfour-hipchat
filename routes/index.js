@@ -149,9 +149,73 @@ module.exports = function (app, addon) {
     var item = req.body.item;
     var command = item.message.message.split(' ');
     switch (command[1]) {
+    case 'challenge':
+    Game.findOne({
+      room_id: item.room.id,
+      active: true
+    }, function(err, game) {
+      if (!game) {
+        User.findOne({
+          hipchat_id: item.message.from.id,
+          hipchat_handle: item.message.from.mention_name
+        }, function(err, challenger) {
+          if (!challenger) {
+            challenger = new User({
+              hipchat_id: item.message.from.id,
+              hipchat_handle: item.message.from.mention_name,
+              name: item.message.from.name,
+            });
+          }
+          challenger.save(function(err) {
+            User.findOne({
+              hipchat_id: item.message.mentions[0].id,
+              hipchat_handle: item.message.mentions[0].mention_name
+            }, function(err, challengee) {
+              if (!challengee) {
+                challengee = new User({
+                  hipchat_id: item.message.mentions[0].id,
+                  hipchat_handle: item.message.mentions[0].mention_name,
+                  name: item.message.mentions[0].name
+                });
+              }
+              challengee.save(function(err) {
+                var game = new Game({
+                  room_id: item.room.id,
+                  challenger: challenger._id,
+                  challengee: challengee._id,
+                });
+                game.save(function(err) {
+                  hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'The game is on!  Drop checkers in the top slots.  First to get 4 in a row wins!').then(function() {
+                    game.generateImage(function(image_url) {
+                      hipchat.sendMessage(req.clientInfo, req.identity.roomId, addon.config.localBaseUrl() + '/' + image_url, {options: {
+                        format: 'text',
+                        color: 'yellow'
+                      }}).then(function() {
+                        hipchat.sendMessage(req.clientInfo, req.identity.roomId, '@' + challenger.hipchat_handle + ' goes first...', {options: {
+                          format: 'text',
+                        }}).then(function() {
+                          res.sendStatus(200);
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      } else {
+        hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Sorry, looks like there\'s another game going on in this room right now.  Please cancel it or try a different room.').then(function() {
+          res.sendStatus(200);
+        });
+      }
+    });
+    break;
     default:
-      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again.').then(function (data) {
-        res.json({status: 'ok'});
+      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again', {options: {
+          color: 'red'
+      }}).then(function() {
+        res.sendStatus(200);
       });
       break;
     }
