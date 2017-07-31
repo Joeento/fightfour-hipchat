@@ -22,11 +22,6 @@ var http = require('http');
 var path = require('path');
 var os = require('os');
 
-//add my game models
-var User = require('./models/user');
-var Game = require('./models/game');
-
-
 // Uncomment this if you're using redis as your store.
 // ac.store.register('redis', require('atlassian-connect-express-redis'));
 

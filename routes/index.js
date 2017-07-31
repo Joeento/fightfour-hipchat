@@ -3,6 +3,9 @@ var cors = require('cors');
 var uuid = require('uuid');
 var url = require('url');
 
+var User = require('../models/user');
+var Game = require('../models/game');
+
 // This is the heart of your HipChat Connect add-on. For more information,
 // take a look at https://developer.atlassian.com/hipchat/tutorials/getting-started-with-atlassian-connect-express-node-js
 module.exports = function (app, addon) {
