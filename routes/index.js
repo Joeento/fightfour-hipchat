@@ -261,6 +261,7 @@ module.exports = function (app, addon) {
                         User.findById(winning_user, function(err, user) {
                           hipchat.sendMessage(req.clientInfo, req.identity.roomId, '@' + user.hipchat_handle + ' just won.  Congratulations!!', {options: {
                             format: 'text',
+                            color: 'green'
                           }}).then(function() {
                             res.sendStatus(200);
                           });
