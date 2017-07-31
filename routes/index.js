@@ -211,6 +211,29 @@ module.exports = function (app, addon) {
         }
       });
       break;
+    case 'cancel':
+      Game.findOne({
+        room_id: item.room.id,
+        active: true
+      }).populate('challenger').populate('challengee').exec(function(err, game) {
+        if (game) {
+          game.active = false;
+          game.save(function(err) {
+            hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Okay, the game between @' + game.challenger.hipchat_handle + ' and @' + game.challengee.hipchat_handle + ' has been cancelled.', {options: {
+              format: 'text',
+            }}).then(function() {
+              res.sendStatus(200);
+            });
+          });
+        } else {
+          hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Doesn\'t look like there\'s a game to cancel right now.  Feel free to start one.', {options: {
+            format: 'text',
+          }}).then(function() {
+            res.sendStatus(200);
+          });
+        }
+      });
+      break;
     default:
       hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again', {options: {
           color: 'red'
