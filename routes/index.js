@@ -234,6 +234,77 @@ module.exports = function (app, addon) {
         }
       });
       break;
+    case 'drop':
+      Game.findOne({room_id: item.room.id, active: true}, function(err, game) {
+        if (err) throw err;
+        User.findOne({hipchat_id: item.message.from.id}, function(err, user) {
+          try {
+            game.dropPiece(command[2], user);
+            game.save(function(err) {
+              hipchat.sendMessage(req.clientInfo, req.identity.roomId, '@' + item.message.from.mention_name + ' has made a move:', {options: {
+                format: 'text',
+              }}).then(function() {
+                game.generateImage(function(image_url) {
+                  hipchat.sendMessage(req.clientInfo, req.identity.roomId, addon.config.localBaseUrl() + '/' + image_url, {options: {
+                    format: 'text',
+                  }}).then(function() {
+                    var winner = game.checkforWinner();
+                    var winning_user;
+                    if (winner === 1) {
+                      winning_user = game.challenger;
+                    } else if (winner === 2) {
+                      winning_user = game.challengee;
+                    }
+                    if (winning_user) {
+                      game.active = false;
+                      game.save(function() {
+                        User.findById(winning_user, function(err, user) {
+                          hipchat.sendMessage(req.clientInfo, req.identity.roomId, '@' + user.hipchat_handle + ' just won.  Congratulations!!', {options: {
+                            format: 'text',
+                          }}).then(function() {
+                            res.sendStatus(200);
+                          });
+                        });
+                      });
+                    } else if (game.checkForTie()) {
+                      game.active = false;
+                      game.save(function() {
+                        hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Looks like a tie.', {options: {
+                          format: 'text',
+                        }}).then(function() {
+                          res.sendStatus(200);
+                        });
+                      });
+                      
+                    } else {
+                      User.findById(game.turn, function(err, user) {
+                        hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Now it\'s @' + user.hipchat_handle + '\'s turn', {options: {
+                          format: 'text',
+                        }}).then(function() {
+                          res.sendStatus(200);
+                        });
+                      });
+                    }
+                  });
+                });
+                
+              });
+            });
+          } catch (err) {
+            console.log(err);
+            hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Now it\'s @' + user.hipchat_handle + '\'s turn', {options: {
+              format: 'text',
+              color: 'red'
+            }}).then(function() {
+              res.sendStatus(200);
+            });
+            
+          }
+          
+          
+        });
+      });
+      break;
     default:
       hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again', {options: {
           color: 'red'
