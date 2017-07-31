@@ -3,8 +3,8 @@
   "name": "FightFour",
   "description": "My very first HipChat add-on",
   "vendor": {
-    "name": "Angry Nerds",
-    "url": "https://www.hipchat.com"
+    "name": "Eric Kudler",
+    "url": "https://www.erickudler.com"
   },
   "links": {
     "self": "{{localBaseUrl}}/atlassian-connect.json",
