@@ -299,8 +299,7 @@ module.exports = function (app, addon) {
               });
             });
           } catch (err) {
-            console.log(err);
-            hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Now it\'s @' + user.hipchat_handle + '\'s turn', {options: {
+            hipchat.sendMessage(req.clientInfo, req.identity.roomId, err.message, {options: {
               format: 'text',
               color: 'red'
             }}).then(function() {
