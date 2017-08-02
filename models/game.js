@@ -31,12 +31,13 @@ gameSchema.methods.dropPiece = function(slot, user) {
 	
 
 	slot -= 1;
-	if (this.board[0][slot] !== 0) {
-		throw {message: 'That slot is already full.  Try a different one.'};
-	}
 	if (slot < 0 || slot >= this.board[0].length) {
 		throw {message: 'Please choose a slot between 1 and 7.'};
 	}
+	if (this.board[0][slot] !== 0) {
+		throw {message: 'That slot is already full.  Try a different one.'};
+	}
+	
 	var depth = this.getDepth(slot);
 	var board = this.board;
 	board[depth][slot] = this.challenger.equals(user._id) ? 1 : 2;
