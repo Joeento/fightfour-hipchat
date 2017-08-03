@@ -314,6 +314,43 @@ module.exports = function (app, addon) {
         });
       });
       break;
+    case 'scoreboard':
+      User.aggregate([
+        {
+          $group : {
+             _id : '$_id',
+             hipchat_id: {$first: "$hipchat_id"},
+             hipchat_handle: {$first: "$hipchat_handle"},
+             wins: {$first: "$wins"},
+             loses: {$first: "$loses"},
+             score: { $sum: { $add: [ "$wins", "$loses" ] } },
+          }
+        },
+        {$sort : {score : -1}},
+      ],
+      function(err, users) {
+        var scoreboard = '<table>';
+        scoreboard += '<tr>';
+        scoreboard += "<td>Rank</td><td>|</td><td>Name</td><td>|</td><td>Wins</td><td>|</td><td>Loses</td><td>|</td><td>Score</td>";
+        scoreboard += '</tr>';
+
+        for(var i = 0; i < users.length; i++) { 
+          var user = users[i];
+          scoreboard += '<tr>';
+          scoreboard += '<td>' +(i + 1) + "</td><td>|</td><td>" + user.hipchat_handle + "</td><td>|</td><td>" + user.wins + "</td><td>|</td><td>" + user.loses + "</td><td>|</td><td>" + user.score + "</td>";
+          scoreboard += '</tr>';
+          
+        }
+        scoreboard += '</table>';
+        var scoreboard2 = '<table><tr><td>Test 1</td></tr><tr><td>Test 2</td></tr></table>';
+        hipchat.sendMessage(req.clientInfo, req.identity.roomId, scoreboard, {options: {
+          format: 'html',
+          color: 'yellow'
+        }}).then(function() {
+          res.sendStatus(200);
+        });
+      });
+      break;
     default:
       hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Unrecognized command.  Try again', {options: {
           color: 'red'
