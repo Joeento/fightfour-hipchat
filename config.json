@@ -85,7 +85,7 @@
         // that to be honored here.
         "port": "$PORT",
         // This is the public URL to your production add-on.
-        "localBaseUrl": "https://pure-oasis-31429.herokuapp.com/",
+        "localBaseUrl": "https://pure-oasis-31429.herokuapp.com",
         "store": {
             "adapter": "jugglingdb",
             "type": "sqlite3",
