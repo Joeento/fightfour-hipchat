@@ -171,6 +171,7 @@ module.exports = function (app, addon) {
                 hipchat_id: item.message.from.id,
                 hipchat_handle: item.message.from.mention_name,
                 name: item.message.from.name,
+                room_id: item.room.id
               });
             }
             challenger.save(function(err) {
@@ -182,7 +183,8 @@ module.exports = function (app, addon) {
                   challengee = new User({
                     hipchat_id: item.message.mentions[0].id,
                     hipchat_handle: item.message.mentions[0].mention_name,
-                    name: item.message.mentions[0].name
+                    name: item.message.mentions[0].name,
+                    room_id: item.room.id
                   });
                 }
                 challengee.save(function(err) {

@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
 	hipchat_id: {type: 'String', unique: true},
 	hipchat_handle: {type: 'String', unique: true},
+	room_id: String,
 	name: String,
 	wins: { type: 'Number', default: 0},
 	loses: { type: 'Number', default: 0},
