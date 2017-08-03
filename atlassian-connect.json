@@ -58,29 +58,6 @@
         "url": "{{localBaseUrl}}/sidebar"
       }
     ],
-    "dialog": [
-      {
-        "key": "sample.dialog",
-        "title": {
-          "value": "Hello Dialog!"
-        },
-        "url": "{{localBaseUrl}}/dialog",
-        "options": {
-          "style": "normal",
-          "primaryAction": {
-            "name": {
-              "value": "Say Hello!"
-            },
-            "key": "sample.dialog.action",
-            "enabled": true
-          },
-          "size": {
-            "width": "400px",
-            "height": "200px"
-          }
-        }
-      }
-    ],
     "action": [
       {
         "key": "sample.action",
