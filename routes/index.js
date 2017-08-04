@@ -245,6 +245,15 @@ module.exports = function (app, addon) {
     case 'drop':
       Game.findOne({room_id: item.room.id, active: true}, function(err, game) {
         if (err) throw err;
+        if (!game) {
+          hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'Sorry, there isn\'t currently a game running.  Start one by challenging somebody.', {options: {
+            format: 'text',
+            color: 'red'
+          }}).then(function() {
+            res.sendStatus(200);
+          });
+          return;
+        }
         User.findOne({hipchat_id: item.message.from.id}, function(err, user) {
           try {
             game.dropPiece(command[2], user);
