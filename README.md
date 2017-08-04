@@ -1,34 +1,5 @@
-# Atlassian Add-on using Express
-
-Congratulations! You've successfully created a HipChat Connect Add-on using the Express web application framework.
-
-## Running your add-on
-
-Install your dependencies.
-```
-npm install
-```
-
-On a separate terminal, start up an ngrok tunnel to port 3000.
-
-```
-ngrok http 3000 # if you've got ngrok installed globally
-
-or
-
-./node_modules/ngrok/bin/ngrok http 3000 # local dependency
-```
-
-Copy the __https__ forwarding URL. e.g. https://cace28ac.ngrok.io
-
-```
-AC_LOCAL_BASE_URL=https://cace28ac.ngrok.io node app.js
-```
-
-Your add-on should now be running on localhost:3000 and forwarded to the ngrok https URL.
-
-Use the ngrok https URL to install the add-on to a HipChat room.
-
-## What's next?
-* [Read the HipChat Connect guides](https://developer.atlassian.com/hipchat/guide)
-* [View the HipChat API reference](https://www.hipchat.com/docs/apiv2)
+## FightFour Your Stories
+FightFour is a lightweight game that can be installed on any HipChat server.  The idea is that 2 players are given a grid.  Players take turns dropping tokens(red or black depending on the player) into the top of the grid.  The tokens drop to the bottom, but can be stacked on top of each other.  The first person to get 4 in a row, either horizontally, vertically, or diagonal wins.  Because FightFour is a HipChat game, it can be played by only typing in a couple of commands:
+ * `challenge` - Begins a game renders an empty grid for visual reference.  Must be followed by the tagged username you want to challenge.
+ * `drop` - Drops a token down the column of your choice.  Must be followed by the number column you want the token to fall in (1-7).
+ * `cancel` - only one game can be played in a room at a time to prevent confusion.  If you want to start a new game in a room where one hasn't been completed(i.e. no winner) then you'll need to cancel it.
