@@ -37,7 +37,6 @@ var app = express();
 var addon = ac(app);
 // You can set this in `config.js`
 var port = addon.config.port();
-console.log(addon.config);
 // Declares the environment to use in `config.js`
 var devEnv = app.get('env') == 'development';
 
@@ -46,7 +45,6 @@ var hipchat = require('atlassian-connect-express-hipchat')(addon, app);
 
 // The following settings applies to all environments
 app.set('port', port);
-console.log(port);
 
 // Configure the Handlebars view engine
 app.engine('hbs', hbs.express3({partialsDir: viewsDir}));
