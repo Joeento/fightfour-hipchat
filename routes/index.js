@@ -153,7 +153,6 @@ module.exports = function (app, addon) {
 
   app.post('/webhook', addon.authenticate(), function (req, res) {
     var item = req.body.item;
-    console.log(req.body);
     var command = item.message.message.split(' ');
     switch (command[1]) {
     case 'challenge':
