@@ -19,7 +19,7 @@
           <div class="aui-page-header-main intro-header">
             <div class="aui-group">
               <div class="aui-item addon-logo">
-                <img src="http://abotars.hipch.at/bot/{{key}}.png" alt="{{name}}">
+                <img src="img/logo.png" alt="{{name}}">
 
                 <div>
                   <a href="https://www.hipchat.com/addons/install?url={{links.self}}" class="aui-button aui-button-primary"
@@ -47,9 +47,18 @@
             <div class="aui-group">
               <div class="aui-item">
                 <p>
-                  This is a scaffold marketing homepage for your add-on. Use this to show people what your add-on can do.
-                  You can edit this
-                  page in <code>./views/homepage.hbs</code>.
+                  FightFour is a lightweight game that can be installed on any HipChat server. The idea is that 2 players are given a grid. Players take turns dropping tokens(red or black depending on the player) into the top of the grid. The tokens drop to the bottom, but can be stacked on top of each other. The first person to get 4 in a row, either horizontally, vertically, or diagonal wins. Because FightFour is a HipChat game, it can be played by only typing in a couple of commands:
+                  <ul>
+                    <li>
+                      <code>challenge</code> - Begins a game renders an empty grid for visual reference. Must be followed by the tagged username you want to challenge.
+                    </li>
+                    <li>
+                      <code>drop</code> - Drops a token down the column of your choice. Must be followed by the number column you want the token to fall in (1-7).
+                    </li>
+                    <li>
+                      <code>cancel</code> - only one game can be played in a room at a time to prevent confusion. If you want to start a new game in a room where one hasn't been completed(i.e. no winner) then you'll need to cancel it.
+                    </li>
+                  </ul>
                 </p>
               </div>
             </div>
